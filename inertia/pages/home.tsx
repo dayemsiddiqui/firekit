@@ -1,4 +1,5 @@
 import { Head } from '@inertiajs/react'
+import { Button } from '../components/ui/button'
 
 export default function Home() {
   return (
@@ -19,6 +20,41 @@ export default function Home() {
               />
             </svg>
           </a>
+        </div>
+
+        {/* shadcn/ui Demo Section */}
+        <div className="isolate max-w-screen-xl mx-auto px-16 xl:px-8 py-8">
+          <div className="bg-white rounded-2xl border border-sand-7 p-8 shadow-sm">
+            <h2 className="text-xl font-semibold mb-4 text-sand-12">shadcn/ui Components Demo</h2>
+            <p className="text-sand-11 mb-6">
+              Your AdonisJS project now has shadcn/ui integrated! Here are some button variations:
+            </p>
+
+            <div className="flex flex-wrap gap-4">
+              <Button>Default Button</Button>
+              <Button variant="secondary">Secondary</Button>
+              <Button variant="destructive">Destructive</Button>
+              <Button variant="outline">Outline</Button>
+              <Button variant="ghost">Ghost</Button>
+              <Button variant="link">Link</Button>
+            </div>
+
+            <div className="flex flex-wrap gap-4 mt-4">
+              <Button size="sm">Small</Button>
+              <Button size="default">Default</Button>
+              <Button size="lg">Large</Button>
+              <Button size="icon">
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
+              </Button>
+            </div>
+          </div>
         </div>
 
         {/* Bento with documentation, Adocasts, packages and Discord */}

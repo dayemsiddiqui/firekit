@@ -139,7 +139,7 @@ test.group('Dashboard', (group) => {
       password: 'password123',
     })
 
-    const loginResponse = await client
+    await client
       .post('/login')
       .form({
         email: 'test@example.com',
@@ -147,18 +147,18 @@ test.group('Dashboard', (group) => {
       })
       .redirects(0)
 
-    const cookies = loginResponse.cookies()
-
     // First dashboard request
-    const firstResponse = await client.get('/dashboard').cookies(cookies)
+    const firstResponse = await client.get('/dashboard').withInertia()
+    firstResponse.assertInertiaComponent('dashboard/index')
     assert.equal(firstResponse.status(), 200)
 
     // Second dashboard request with same cookies
-    const secondResponse = await client.get('/dashboard').cookies(cookies)
+    const secondResponse = await client.get('/dashboard').withInertia()
+    secondResponse.assertInertiaComponent('dashboard/index')
     assert.equal(secondResponse.status(), 200)
-
     // Third dashboard request with same cookies
-    const thirdResponse = await client.get('/dashboard').cookies(cookies)
+    const thirdResponse = await client.get('/dashboard').withInertia()
+    thirdResponse.assertInertiaComponent('dashboard/index')
     assert.equal(thirdResponse.status(), 200)
   })
 })

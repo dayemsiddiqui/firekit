@@ -6,13 +6,8 @@ test.group('Authentication - Login Page', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
 
   test('should render login page with correct Inertia component', async ({ client, assert }) => {
-    const response = await client.get('/login')
-
-    assert.equal(response.status(), 200)
-
-    // Check for Inertia response structure
-    const responseText = response.text()
-    assert.include(responseText, 'auth/login') // Component name
+    const response = await client.get('/login').withInertia()
+    response.assertInertiaComponent('auth/login')
   })
 })
 
@@ -71,13 +66,8 @@ test.group('Authentication - Register Page', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
 
   test('should render register page with correct Inertia component', async ({ client, assert }) => {
-    const response = await client.get('/register')
-
-    assert.equal(response.status(), 200)
-
-    // Check for Inertia response structure
-    const responseText = response.text()
-    assert.include(responseText, 'auth/register') // Component name
+    const response = await client.get('/register').withInertia()
+    response.assertInertiaComponent('auth/register')
   })
 })
 
@@ -163,17 +153,9 @@ test.group('Authentication - Register Process', (group) => {
 test.group('Authentication - Forget Password', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
 
-  test('should render forget password page with correct Inertia component', async ({
-    client,
-    assert,
-  }) => {
-    const response = await client.get('/forget-password')
-
-    assert.equal(response.status(), 200)
-
-    // Check for Inertia response structure
-    const responseText = response.text()
-    assert.include(responseText, 'auth/forget-password') // Component name
+  test('should render forget password page with correct Inertia component', async ({ client }) => {
+    const response = await client.get('/forget-password').withInertia()
+    response.assertInertiaComponent('auth/forget-password')
   })
 
   test('should redirect back with success message for existing email', async ({

@@ -1,0 +1,11 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+- This project uses the latest version of AdonisJS with React on the frontend with the help of inertiaJS
+- Whenever you are not sure how to implement something look up the web for the lastest version and best practice guidelines on how to implement it in AdonisJS
+- Whenever you make any changes in the project, please always write/update tests for it.- 
+- The frontend is using SHADCN and tailwindcss with React
+- Always try to build the project after the changes and ensure it doesnt have any build or type errors
+- Always run tests after finishing your work to ensure that everything works as expected and you havent broken anything

@@ -23,7 +23,7 @@ export default class AuthController {
       return response.redirect('/dashboard')
     } catch (error) {
       session.flash('error', 'Invalid credentials')
-      return response.redirect().back()
+      return response.redirect('/login')
     }
   }
 
@@ -48,17 +48,17 @@ export default class AuthController {
     // Basic validation
     if (!email || !password || !passwordConfirmation) {
       session.flash('error', 'All fields are required.')
-      return response.redirect().back()
+      return response.redirect('/register')
     }
 
     if (password !== passwordConfirmation) {
       session.flash('error', 'Passwords do not match.')
-      return response.redirect().back()
+      return response.redirect('/register')
     }
 
     if (password.length < 6) {
       session.flash('error', 'Password must be at least 6 characters long.')
-      return response.redirect().back()
+      return response.redirect('/register')
     }
 
     try {
@@ -66,7 +66,7 @@ export default class AuthController {
       const existingUser = await User.findBy('email', email)
       if (existingUser) {
         session.flash('error', 'An account with this email already exists.')
-        return response.redirect().back()
+        return response.redirect('/register')
       }
 
       const user = await User.create({
@@ -82,7 +82,7 @@ export default class AuthController {
     } catch (error) {
       console.error('Registration error:', error)
       session.flash('error', 'Failed to create account. Please try again.')
-      return response.redirect().back()
+      return response.redirect('/register')
     }
   }
 
@@ -104,16 +104,16 @@ export default class AuthController {
 
       if (!user) {
         session.flash('error', 'No account found with this email address')
-        return response.redirect().back()
+        return response.redirect('/forget-password')
       }
 
       // TODO: Implement password reset email logic here
       // For now, just show a success message
       session.flash('success', 'Password reset instructions have been sent to your email')
-      return response.redirect().back()
+      return response.redirect('/forget-password')
     } catch (error) {
       session.flash('error', 'Something went wrong. Please try again.')
-      return response.redirect().back()
+      return response.redirect('/forget-password')
     }
   }
 

@@ -13,3 +13,7 @@ alwaysApply: true
 - Ensure end to end type safety by always using InferPageProps, DO NOT Redefine or redeclare the duplicate types on the frontend as it ruins end to end type safety
 
 - Since we use React with InertiaJS on the frontned, whenever you are writing tests for controller ensure that you create appropiate asserts and test cases to cater the inertiajs response from the controller which return a inertiaJS reponse
+
+- When writing code always follow the best practices for AdonisJS, InertiaJS, typescript and domain driven design. If you are unsure about anything search the web for best practices
+
+- Whenever you make changes in the codebase try to following existing patterns

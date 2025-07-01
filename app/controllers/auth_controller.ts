@@ -38,9 +38,37 @@ export default class AuthController {
    * Handle register form submission
    */
   async register({ request, auth, response, session }: HttpContext) {
-    const { fullName, email, password } = request.only(['fullName', 'email', 'password'])
+    const { fullName, email, password, passwordConfirmation } = request.only([
+      'fullName',
+      'email',
+      'password',
+      'passwordConfirmation',
+    ])
+
+    // Basic validation
+    if (!email || !password || !passwordConfirmation) {
+      session.flash('error', 'All fields are required.')
+      return response.redirect().back()
+    }
+
+    if (password !== passwordConfirmation) {
+      session.flash('error', 'Passwords do not match.')
+      return response.redirect().back()
+    }
+
+    if (password.length < 6) {
+      session.flash('error', 'Password must be at least 6 characters long.')
+      return response.redirect().back()
+    }
 
     try {
+      // Check if user already exists
+      const existingUser = await User.findBy('email', email)
+      if (existingUser) {
+        session.flash('error', 'An account with this email already exists.')
+        return response.redirect().back()
+      }
+
       const user = await User.create({
         fullName,
         email,
@@ -52,6 +80,7 @@ export default class AuthController {
       session.flash('success', 'Account created successfully!')
       return response.redirect('/dashboard')
     } catch (error) {
+      console.error('Registration error:', error)
       session.flash('error', 'Failed to create account. Please try again.')
       return response.redirect().back()
     }

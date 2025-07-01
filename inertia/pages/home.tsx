@@ -1,7 +1,17 @@
-import { Head } from '@inertiajs/react'
+import { Head, Link } from '@inertiajs/react'
 import { Button } from '../components/ui/button'
 
-export default function Home() {
+interface User {
+  id: number
+  fullName: string | null
+  email: string
+}
+
+interface HomeProps {
+  user?: User
+}
+
+export default function Home({ user }: HomeProps) {
   return (
     <>
       <Head title="Firekit - AdonisJS 6 Starter Kit" />
@@ -15,8 +25,25 @@ export default function Home() {
                 <h1 className="text-2xl font-bold text-slate-900">🔥 Firekit</h1>
               </div>
               <div className="flex space-x-4">
-                <Button variant="outline">Documentation</Button>
-                <Button>Get Started</Button>
+                {user ? (
+                  <>
+                    <span className="text-sm text-slate-600 flex items-center">
+                      Welcome, {user.fullName || 'User'}!
+                    </span>
+                    <Link href="/dashboard">
+                      <Button>Dashboard</Button>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/login">
+                      <Button variant="outline">Sign In</Button>
+                    </Link>
+                    <Link href="/register">
+                      <Button>Get Started</Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -2,11 +2,13 @@
 
 This is a starter template that allows solo devs and entreprenuers to quickly get up and running with new apps.
 
-### Get Started
+## Get Started
 
 Run the following command to quickly start a new project
 
+```
 npm init adonisjs@latest -- -K="github:dayemsiddiqui/firekit.git".
+```
 
 ### Why use this starter kit
 

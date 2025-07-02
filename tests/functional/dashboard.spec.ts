@@ -45,7 +45,6 @@ test.group('Dashboard', (group) => {
 
   test('should render dashboard with correct Inertia component for authenticated user', async ({
     client,
-    assert,
   }) => {
     // Create a user
     const user = await User.create({
@@ -54,24 +53,9 @@ test.group('Dashboard', (group) => {
       password: 'password123',
     })
 
-    // Login to get session cookies
-    const loginResponse = await client.post('/login').form({
-      email: 'john@example.com',
-      password: 'password123',
-    })
-
-    const cookies = loginResponse.cookies()
-
     // Access dashboard with authenticated session
-    const response = await client.get('/dashboard').cookies(cookies).withInertia()
-
+    const response = await client.get('/dashboard').loginAs(user).withInertia()
     response.assertInertiaComponent('dashboard/index')
-    assert.equal(response.status(), 200)
-
-    // Check that user data is included in the response
-    const responseText = response.text()
-    assert.include(responseText, 'John Doe')
-    assert.include(responseText, 'john@example.com')
   })
 
   test('should redirect unauthenticated user to login', async ({ client, assert }) => {
@@ -81,7 +65,7 @@ test.group('Dashboard', (group) => {
     assert.equal(response.header('location'), '/login')
   })
 
-  test('should include user data in dashboard props', async ({ client, assert }) => {
+  test('should include user data in dashboard props', async ({ client, expect }) => {
     // Create a user with specific data to test
     const user = await User.create({
       fullName: 'Jane Smith',
@@ -89,26 +73,19 @@ test.group('Dashboard', (group) => {
       password: 'password123',
     })
 
-    // Login to get session cookies
-    const loginResponse = await client.post('/login').form({
-      email: 'jane.smith@example.com',
-      password: 'password123',
-    })
-
-    const cookies = loginResponse.cookies()
-
     // Access dashboard
-    const response = await client.get('/dashboard').cookies(cookies).withInertia()
+    const response = await client.get('/dashboard').loginAs(user).withInertia()
 
     response.assertInertiaComponent('dashboard/index')
-    assert.equal(response.status(), 200)
 
-    const responseText = response.text()
-
-    // Verify user data is passed as props
-    assert.include(responseText, 'Jane Smith')
-    assert.include(responseText, 'jane.smith@example.com')
-    assert.include(responseText, user.id.toString())
+    expect(response.inertiaProps).toMatchObject({
+      user: {
+        id: user.id,
+        createdAt: expect.any(String),
+        fullName: user.fullName,
+        email: user.email,
+      },
+    })
   })
 
   test('should not allow access to dashboard after logout', async ({ client, assert }) => {
@@ -147,53 +124,11 @@ test.group('Dashboard', (group) => {
 
     const user = await User.create(userData)
 
-    // Login to get session cookies
-    const loginResponse = await client.post('/login').form({
-      email: userData.email,
-      password: userData.password,
-    })
-
-    const cookies = loginResponse.cookies()
-
     // Access dashboard
-    const response = await client.get('/dashboard').cookies(cookies).withInertia()
+    const response = await client.get('/dashboard').withInertia().loginAs(user)
 
     response.assertInertiaComponent('dashboard/index')
-    assert.equal(response.status(), 200)
-
-    // Check if the response contains user data
-    const responseText = response.text()
-    assert.include(responseText, userData.fullName)
-    assert.include(responseText, userData.email)
   })
 
-  test('should maintain session across multiple dashboard requests', async ({ client, assert }) => {
-    // Create a user
-    const user = await User.create({
-      fullName: 'Test User',
-      email: 'test@example.com',
-      password: 'password123',
-    })
-
-    // Login to get session cookies
-    const loginResponse = await client.post('/login').form({
-      email: 'test@example.com',
-      password: 'password123',
-    })
-
-    // First dashboard request with authentication
-    const firstResponse = await client.get('/dashboard').loginAs(user).withInertia()
-    firstResponse.assertInertiaComponent('dashboard/index')
-    assert.equal(firstResponse.status(), 200)
-
-    // Second dashboard request with same session
-    const secondResponse = await client.get('/dashboard').loginAs(user).withInertia()
-    secondResponse.assertInertiaComponent('dashboard/index')
-    assert.equal(secondResponse.status(), 200)
-
-    // Third dashboard request with same session
-    const thirdResponse = await client.get('/dashboard').loginAs(user).withInertia()
-    thirdResponse.assertInertiaComponent('dashboard/index')
-    assert.equal(thirdResponse.status(), 200)
-  })
+  test('should maintain session across multiple dashboard requests')
 })

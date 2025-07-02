@@ -1,4 +1,5 @@
 import { assert } from '@japa/assert'
+import { expect } from '@japa/expect'
 import { apiClient } from '@japa/api-client'
 import app from '@adonisjs/core/services/app'
 import type { Config } from '@japa/runner/types'
@@ -18,6 +19,7 @@ import { sessionApiClient } from '@adonisjs/session/plugins/api_client'
  */
 export const plugins: Config['plugins'] = [
   assert(),
+  expect(),
   apiClient(),
   authApiClient(app),
   sessionApiClient(app),

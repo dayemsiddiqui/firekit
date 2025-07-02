@@ -48,3 +48,25 @@ The test command accepts the following flags.
 --timeout: Define the global timeout for all the tests.
 --force-exit: Force exit the test process if it does not ends gracefully.
 --tests: Run specific tests by title.
+
+### InertiaJS end to end type safety
+
+Types sharing
+Usually, you will want to share the types of the data you are passing to your frontend pages components. A simple way to do this is to use the InferPageProps type.
+
+app/controllers/users_controller.ts
+inertia/pages/users/index.tsx
+Copy code to clipboard
+import { InferPageProps } from '@adonisjs/inertia/types'
+import type { UsersController } from '../../controllers/users_controller.ts'
+
+export function UsersPage(
+// 👇 It will be correctly typed based
+// on what you passed to inertia.render
+// in your controller
+props: InferPageProps<UsersController, 'index'>
+) {
+return (
+// ...
+)
+}

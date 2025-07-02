@@ -2,6 +2,12 @@
 
 This is a starter template that allows solo devs and entreprenuers to quickly get up and running with new apps.
 
+### Get Started
+
+Run the following command to quickly start a new project
+
+npm init adonisjs@latest -- -K="github:dayemsiddiqui/firekit.git".
+
 ### Why use this starter kit
 
 AdonisJS is deeply inspired by the Laravel ecosystem. I love AdonisJS because it brings the speed and DX of Laravel combined with the power of Typescript.

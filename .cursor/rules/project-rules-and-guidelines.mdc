@@ -70,3 +70,7 @@ return (
 // ...
 )
 }
+
+### Logger
+
+- user logger from adonisjs instead of using console.log when logging on the backend

@@ -181,20 +181,18 @@ test.group('Dashboard', (group) => {
       password: 'password123',
     })
 
-    const cookies = loginResponse.cookies()
-
     // First dashboard request with authentication
-    const firstResponse = await client.get('/dashboard').cookies(cookies).withInertia()
+    const firstResponse = await client.get('/dashboard').loginAs(user).withInertia()
     firstResponse.assertInertiaComponent('dashboard/index')
     assert.equal(firstResponse.status(), 200)
 
     // Second dashboard request with same session
-    const secondResponse = await client.get('/dashboard').cookies(cookies).withInertia()
+    const secondResponse = await client.get('/dashboard').loginAs(user).withInertia()
     secondResponse.assertInertiaComponent('dashboard/index')
     assert.equal(secondResponse.status(), 200)
 
     // Third dashboard request with same session
-    const thirdResponse = await client.get('/dashboard').cookies(cookies).withInertia()
+    const thirdResponse = await client.get('/dashboard').loginAs(user).withInertia()
     thirdResponse.assertInertiaComponent('dashboard/index')
     assert.equal(thirdResponse.status(), 200)
   })

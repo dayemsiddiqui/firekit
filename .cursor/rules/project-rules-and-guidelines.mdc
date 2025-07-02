@@ -17,3 +17,34 @@ alwaysApply: true
 - When writing code always follow the best practices for AdonisJS, InertiaJS, typescript and domain driven design. If you are unsure about anything search the web for best practices
 
 - Whenever you make changes in the codebase try to following existing patterns
+
+### Testing
+
+You can run tests like this:
+Running tests
+You can run tests by executing the node ace test command. Also, you can run tests for a specific suite by passing the suite name.
+
+# Runs all tests
+
+node ace test
+
+# Only functional tests are executed
+
+node ace test functional
+
+# unit and functional tests are executed sequentially
+
+node ace test unit functional
+
+# Only tests with an "orders" or "upload" tag in the "unit" and "functional" suites
+
+node ace test --tags="orders,upload" unit functional
+The test command accepts the following flags.
+
+--watch: Run tests in the watch mode. The watcher will run only tests from the modified file if a test file is changed. Otherwise, all tests are executed.
+--tags: Run tests that have one or more of the mentioned tags.
+--ignore-tags: The inverse of the --tags flag. Only run tests that do not have all of the mentioned tags.
+--files: Cherry pick and run tests from mentioned files.
+--timeout: Define the global timeout for all the tests.
+--force-exit: Force exit the test process if it does not ends gracefully.
+--tests: Run specific tests by title.

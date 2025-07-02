@@ -3,19 +3,10 @@ import DashboardLayout from '../../components/layouts/dashboard-layout'
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card'
 import { Badge } from '../../components/ui/badge'
 import { Separator } from '../../components/ui/separator'
+import type { InferPageProps } from '@adonisjs/inertia/types'
+import type DashboardController from '#controllers/dashboard_controller'
 
-interface User {
-  id: number
-  fullName: string | null
-  email: string
-  createdAt: string
-}
-
-interface DashboardProps {
-  user: User
-}
-
-export default function Dashboard({ user }: DashboardProps) {
+export default function Dashboard({ user }: InferPageProps<DashboardController, 'index'>) {
   const stats = [
     {
       title: 'Total Projects',

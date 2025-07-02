@@ -15,3 +15,4 @@ However there are still following features missing when starting a Adonis projec
 - A authenticated dashboard page with a proper navigation system and sidebar app layout
 - ShadCN has been included as a baseline component library
 - Properly configured testing environment with all the useful JAPA plugins preconfigured to work well with InertiaJS
+- This starter kit also provides a starting point for cursor rules for this project

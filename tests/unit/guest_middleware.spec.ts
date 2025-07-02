@@ -6,59 +6,35 @@ test.group('Guest Middleware', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
   group.setup(() => testUtils.httpServer().start())
 
-  test('should allow unauthenticated user to access guest routes', async ({ client, assert }) => {
-    const response = await client.get('/login')
+  test('should allow unauthenticated user to access guest routes', async ({ client }) => {
+    const response = await client.get('/login').withInertia()
 
-    assert.equal(response.status(), 200)
-
-    // Check for Inertia response
-    const responseText = response.text()
-    assert.include(responseText, 'auth/login')
+    response.assertInertiaComponent('auth/login')
   })
 
-  test('should allow unauthenticated user to access register page', async ({ client, assert }) => {
-    const response = await client.get('/register')
+  test('should allow unauthenticated user to access register page', async ({ client }) => {
+    const response = await client.get('/register').withInertia()
 
-    assert.equal(response.status(), 200)
-
-    // Check for Inertia response
-    const responseText = response.text()
-    assert.include(responseText, 'auth/register')
+    response.assertInertiaComponent('auth/register')
   })
 
-  test('should allow unauthenticated user to access forget password page', async ({
-    client,
-    assert,
-  }) => {
-    const response = await client.get('/forget-password')
+  test('should allow unauthenticated user to access forget password page', async ({ client }) => {
+    const response = await client.get('/forget-password').withInertia()
 
-    assert.equal(response.status(), 200)
-
-    // Check for Inertia response
-    const responseText = response.text()
-    assert.include(responseText, 'auth/forget-password')
+    response.assertInertiaComponent('auth/forget-password')
   })
 
-  test('should redirect authenticated user away from guest routes', async ({ client, assert }) => {
+  test('should redirect authenticated user away from guest routes', async ({ client }) => {
     // Create and login a user
-    await User.create({
+    const user = await User.create({
       fullName: 'Test User',
       email: 'test@example.com',
       password: 'password123',
     })
 
-    // Login first
-    const loginResponse = await client.post('/login').form({
-      email: 'test@example.com',
-      password: 'password123',
-    })
-
-    const cookies = loginResponse.cookies()
-
     // Try to access login page while authenticated (should redirect to dashboard)
-    const response = await client.get('/login').cookies(cookies).redirects(0)
+    const response = await client.get('/login').loginAs(user).withInertia()
 
-    assert.equal(response.status(), 302)
-    assert.equal(response.header('location'), '/dashboard')
+    response.assertInertiaComponent('dashboard/index')
   })
 })

@@ -1,5 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
+import logger from '@adonisjs/core/services/logger'
+import { LoginValidator } from '#validators/auth'
 
 export default class AuthController {
   /**
@@ -13,17 +15,18 @@ export default class AuthController {
    * Handle login form submission
    */
   async login({ request, auth, response, session }: HttpContext) {
-    const { email, password } = request.only(['email', 'password'])
-
     try {
+      const { email, password } = await request.validateUsing(LoginValidator)
+
       const user = await User.verifyCredentials(email, password)
       await auth.use('web').login(user)
 
       session.flash('success', 'Welcome back!')
       return response.redirect('/dashboard')
     } catch (error) {
+      logger.error(error.message)
       session.flash('error', 'Invalid credentials')
-      return response.redirect('/login')
+      return response.redirect().back()
     }
   }
 
